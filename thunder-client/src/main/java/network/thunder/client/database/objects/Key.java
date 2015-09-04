@@ -11,40 +11,39 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package network.thunder.client.database.objects;
 
-import network.thunder.client.etc.Tools;
-
 import org.bitcoinj.core.ECKey;
 
+import network.thunder.client.etc.Tools;
+
 public class Key {
-	
-	public String publicKey;
-	public String privateKey;
-	public int depth;
-	public int child;
-	
-	public Key() {}
-	
-	public boolean check() {
-		if(child==0)
-			return true;
-		
-		if(privateKey == null) 
-			return false;
-		
-		ECKey key = ECKey.fromPrivate(Tools.stringToByte(privateKey));
-		if(publicKey.equals(Tools.byteToString(key.getPubKey()))) 
-			return true;
-		
-		return false;
-		
-		
-		
-	}
+
+    public String publicKey;
+    public String privateKey;
+    public int depth;
+    public int child;
+
+    public Key() {
+    }
+
+    public boolean check() {
+        if (child == 0)
+            return true;
+
+        if (privateKey == null)
+            return false;
+
+        ECKey key = ECKey.fromPrivate(Tools.stringToByte(privateKey));
+        if (publicKey.equals(Tools.byteToString(key.getPubKey())))
+            return true;
+
+        return false;
+
+    }
 
 }

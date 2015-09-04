@@ -11,7 +11,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,57 +22,58 @@ import org.bitcoinj.core.Transaction;
 
 public class TransactionWrapper {
 
-	int id;
-	String hash;
-	int channelId;
-	int paymentId;
-	byte[] data;
-	
-	Transaction transaction;
-	ECDSASignature signature;
-	
-	public TransactionWrapper(Transaction transaction, ECDSASignature signature) {
-		this.transaction = transaction;
-		this.signature = signature;
-	}
-	
-	public Transaction getTransaction() {
-		return transaction;
-	}
+    int id;
+    String hash;
+    int channelId;
+    int paymentId;
+    byte[] data;
 
-	public ECDSASignature getSignature() {
-		return signature;
-	}
+    Transaction transaction;
+    ECDSASignature signature;
 
-	public TransactionWrapper(Transaction t, int channelId) {
-		this.hash = t.getHashAsString();
-		this.channelId = channelId;
-		this.data = t.bitcoinSerialize();
-	}
-	public TransactionWrapper(Transaction t, int channelId, int id) {
-		this.hash = t.getHashAsString();
-		this.channelId = channelId;
-		this.data = t.bitcoinSerialize();
-		this.id = id;
-	}
+    public TransactionWrapper(Transaction transaction, ECDSASignature signature) {
+        this.transaction = transaction;
+        this.signature = signature;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public Transaction getTransaction() {
+        return transaction;
+    }
 
-	public String getHash() {
-		return hash;
-	}
+    public ECDSASignature getSignature() {
+        return signature;
+    }
 
-	public int getChannelId() {
-		return channelId;
-	}
+    public TransactionWrapper(Transaction t, int channelId) {
+        this.hash = t.getHashAsString();
+        this.channelId = channelId;
+        this.data = t.bitcoinSerialize();
+    }
 
-	public int getPaymentId() {
-		return paymentId;
-	}
+    public TransactionWrapper(Transaction t, int channelId, int id) {
+        this.hash = t.getHashAsString();
+        this.channelId = channelId;
+        this.data = t.bitcoinSerialize();
+        this.id = id;
+    }
 
-	public byte[] getData() {
-		return data;
-	}
+    public int getId() {
+        return id;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public int getChannelId() {
+        return channelId;
+    }
+
+    public int getPaymentId() {
+        return paymentId;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
 }

@@ -11,7 +11,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -42,10 +42,10 @@ import network.thunder.server.communications.objects.EstablishChannelRequestOne;
 import network.thunder.server.database.objects.Channel;
 import network.thunder.server.database.objects.Key;
 import network.thunder.server.database.objects.KeyWrapper;
+import network.thunder.server.database.objects.KeyWrapper.IKey;
 import network.thunder.server.database.objects.Output;
 import network.thunder.server.database.objects.Payment;
 import network.thunder.server.database.objects.TransactionWrapper;
-import network.thunder.server.database.objects.KeyWrapper.IKey;
 import network.thunder.server.etc.Constants;
 import network.thunder.server.etc.KeyDerivation;
 import network.thunder.server.etc.PerformanceLogger;
@@ -96,17 +96,17 @@ public class MySQLConnection {
 		ComboPooledDataSource cpds = new ComboPooledDataSource();
 		cpds.setDriverClass("com.mysql.jdbc.Driver"); //loads the jdbc driver
 		cpds.setJdbcUrl(SideConstants.DATABASE_CONNECTION);
-                                
-			
+
+
 		// the settings below are optional -- c3p0 can work with defaults
-		cpds.setMinPoolSize(2);                                     
+		cpds.setMinPoolSize(2);
 		cpds.setAcquireIncrement(5);
 		cpds.setMaxPoolSize(80);
         cpds.setMaxIdleTime(28800);
 
 		return cpds;
 	}
-	
+
 	/**
 	 * Gets the data source.
 	 *
@@ -116,21 +116,21 @@ public class MySQLConnection {
 	 */
 	public static DataSource getDataSource(int id) throws PropertyVetoException {
 		ComboPooledDataSource cpds = new ComboPooledDataSource();
-		cpds.setDriverClass( "com.mysql.jdbc.Driver" ); //loads the jdbc driver   
+		cpds.setDriverClass( "com.mysql.jdbc.Driver" ); //loads the jdbc driver
 		if(id==1)
 			cpds.setJdbcUrl( SideConstants.DATABASE_CONNECTION );
 		if(id==2)
 			cpds.setJdbcUrl( SideConstants.DATABASE_CONNECTION2 );
-              
-			
+
+
 		// the settings below are optional -- c3p0 can work with defaults
-		cpds.setMinPoolSize(2);                                     
+		cpds.setMinPoolSize(2);
 		cpds.setAcquireIncrement(5);
 		cpds.setMaxPoolSize(8);
-		
+
 		return cpds;
 	}
-	
+
 	/**
 	 * Builds the database old.
 	 *
@@ -140,23 +140,23 @@ public class MySQLConnection {
 	 */
 	public static void buildDatabaseOld(Connection conn) throws IOException, SQLException  {
 //		ComboPooledDataSource cpds = new ComboPooledDataSource();
-//		cpds.setDriverClass( "com.mysql.jdbc.Driver" ); //loads the jdbc driver            
+//		cpds.setDriverClass( "com.mysql.jdbc.Driver" ); //loads the jdbc driver
 //		cpds.setJdbcUrl( SideConstants.DATABASE_CONNECTION_WITHOUT_DB );
-//                                
-//			
+//
+//
 //		// the settings below are optional -- c3p0 can work with defaults
-//		cpds.setMinPoolSize(2);                                     
+//		cpds.setMinPoolSize(2);
 //		cpds.setAcquireIncrement(5);
 //		cpds.setMaxPoolSize(8);
-		
+
 		ScriptRunner scriptRunner = new ScriptRunner(conn, false, true);
 		FileReader reader = new FileReader(new File("create_tables_client.sql"));
 		scriptRunner.runScript(reader);
-		
-		
-		
+
+
+
 	}
-	
+
 	/**
 	 * Builds the database.
 	 *
@@ -169,23 +169,23 @@ public class MySQLConnection {
 	 */
 	public static void buildDatabase(Connection conn) throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException  {
 //		ComboPooledDataSource cpds = new ComboPooledDataSource();
-//		cpds.setDriverClass( "com.mysql.jdbc.Driver" ); //loads the jdbc driver            
+//		cpds.setDriverClass( "com.mysql.jdbc.Driver" ); //loads the jdbc driver
 //		cpds.setJdbcUrl( SideConstants.DATABASE_CONNECTION_WITHOUT_DB );
-//                                
-//			
+//
+//
 //		// the settings below are optional -- c3p0 can work with defaults
-//		cpds.setMinPoolSize(2);                                     
+//		cpds.setMinPoolSize(2);
 //		cpds.setAcquireIncrement(5);
 //		cpds.setMaxPoolSize(8);
-		
+
 		try {
-			
-		
+
+
 		ScriptRunner scriptRunner = new ScriptRunner(conn, false, true);
 		InputStream is = MySQLConnection.class.getClassLoader().getResourceAsStream("sql.sql");
 //		FileReader reader = new FileReader(new File("create_tables_client.sql"));
 		scriptRunner.runScript(new InputStreamReader(is));
-		
+
 		} catch(Exception e) {
 			Class.forName("org.h2.Driver").newInstance();
 			ScriptRunner scriptRunner = new ScriptRunner(conn, false, true);
@@ -194,9 +194,9 @@ public class MySQLConnection {
 			conn.commit();
 
 		}
-		
+
 	}
-	
+
 	/**
 	 * Reset to backup.
 	 *
@@ -209,15 +209,15 @@ public class MySQLConnection {
 	 */
 	public static void resetToBackup() throws PropertyVetoException, SQLException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 //		ComboPooledDataSource cpds = new ComboPooledDataSource();
-//		cpds.setDriverClass( "com.mysql.jdbc.Driver" ); //loads the jdbc driver            
+//		cpds.setDriverClass( "com.mysql.jdbc.Driver" ); //loads the jdbc driver
 //		cpds.setJdbcUrl( SideConstants.DATABASE_CONNECTION_WITHOUT_DB );
-//                                
-//			
+//
+//
 //		// the settings below are optional -- c3p0 can work with defaults
-//		cpds.setMinPoolSize(2);                                     
+//		cpds.setMinPoolSize(2);
 //		cpds.setAcquireIncrement(5);
 //		cpds.setMaxPoolSize(8);
-		
+
 //		conn.setAutoCommit(false);
 		if(SideConstants.RUNS_ON_SERVER) {
 			Connection conn = MySQLConnection.getInstance();
@@ -231,13 +231,13 @@ public class MySQLConnection {
 			FileReader reader = new FileReader(new File("sql.sql"));
 			scriptRunner.runScript(reader);
 			conn.close();
-			
+
 			conn =  DriverManager.getConnection(SideConstants.DATABASE_CONNECTION2);
 			scriptRunner = new ScriptRunner(conn, false, true);
 			reader = new FileReader(new File("sql.sql"));
 			scriptRunner.runScript(reader);
 			conn.close();
-			
+
 //			Class.forName("com.mysql.jdbc.Driver").newInstance();
 //			conn =  DriverManager.getConnection(SideConstants.DATABASE_CONNECTION_SERVER);
 //			scriptRunner = new ScriptRunner(conn, false, true);
@@ -245,14 +245,14 @@ public class MySQLConnection {
 //			scriptRunner.runScript(reader);
 //			conn.close();
 		}
-		
+
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	/**
 	 * Adds the key.
 	 *
@@ -263,12 +263,12 @@ public class MySQLConnection {
 	 * @throws SQLException the SQL exception
 	 */
 	public static void addKey(Connection conn, Key key, int channelId, boolean ourKey) throws SQLException {
-		
+
 
 		PreparedStatement stmt = null;
-		
+
 		try {
-		
+
 			stmt = conn.prepareStatement("INSERT INTO storedkeys VALUES(?,?,?,?,?,?,?,?,?,?)");
 			stmt.setString(1, null);
 			stmt.setInt(2, channelId);
@@ -281,16 +281,16 @@ public class MySQLConnection {
 			stmt.setInt(9, key.depth);
 			stmt.setInt(10, key.child);
 			stmt.execute();
-			
+
 			stmt.close();
 			conn.commit();
-		
+
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 
 	}
-	
+
 	/**
 	 * Adds the key.
 	 *
@@ -301,7 +301,7 @@ public class MySQLConnection {
 	 * @throws SQLException the SQL exception
 	 */
 	public static void addKey(Connection conn, ArrayList<Key> keyList, int channelId, boolean ourKey) throws SQLException {
-		
+
 		if(!ourKey) {
 			for(Key key : keyList) {
 				key.privateKey = null;
@@ -309,11 +309,11 @@ public class MySQLConnection {
 		}
 
 		PreparedStatement stmt = null;
-		
-		try {
-		
 
-	
+		try {
+
+
+
 			stmt = conn.prepareStatement("INSERT INTO storedkeys VALUES(?,?,?,?,?,?,?,?,?,?)");
 			for(Key key : keyList) {
 				stmt.setString(1, null);
@@ -328,7 +328,7 @@ public class MySQLConnection {
 				stmt.setInt(10, key.child);
 				stmt.addBatch();
 			}
-			
+
 			stmt.executeBatch();
 			conn.commit();
 
@@ -338,7 +338,7 @@ public class MySQLConnection {
 
 
 	}
-	
+
 	/**
 	 * Update key.
 	 *
@@ -365,7 +365,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Update key.
 	 *
@@ -388,21 +388,21 @@ public class MySQLConnection {
 					stmt.setInt(3, Tools.boolToInt(exposed));
 					stmt.setInt(4, channel.getId());
 					stmt.setString(5, k.publicKey);
-					
+
 //					System.out.println(k.publicKey);
 //					System.out.println(k.privateKey);
-					
+
 					stmt.addBatch();
 				}
 			}
-	
+
 			stmt.executeBatch();
 			conn.commit();
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 
 	/**
 	 * Insert a output into the database.
@@ -415,9 +415,9 @@ public class MySQLConnection {
 	public static void addOutput(Connection conn, Output output) throws SQLException {
 		PreparedStatement stmt = null;
 		try {
-	
+
 			stmt = conn.prepareStatement("INSERT INTO outputs (transaction_hash, vout, value, private_key, timestamp_locked, transaction_output) values (?, ?, ?, ?, ?, ?)");
-			
+
 			stmt.setString(1, output.getHash());
 			stmt.setInt(2, output.getVout());
 			stmt.setLong(3, output.getValue());
@@ -445,27 +445,27 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		try {
 			stmt = conn.prepareStatement("INSERT INTO transactions (id, hash, channel_id, payment_id, data) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-			
+
 			stmt.setString(1, null);
 			stmt.setString(2, wrapper.getHash());
 			stmt.setInt(3, wrapper.getChannelId());
 			stmt.setInt(4, wrapper.getId());
 			stmt.setBytes(5, wrapper.getData());
-			
-			
+
+
 		    stmt.executeUpdate();
-		    
+
 		    ResultSet rs = stmt.getGeneratedKeys();
 		    rs.first();
 		    int id = rs.getInt(1);
 		    rs.close();
 			return id;
-	
+
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Adds the or update transaction.
 	 *
@@ -479,34 +479,34 @@ public class MySQLConnection {
 		try {
 			if(wrapper.getId() == 0) {
 				stmt = conn.prepareStatement("INSERT INTO transactions (id, hash, channel_id, payment_id, data) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-				
+
 				stmt.setString(1, null);
 				stmt.setString(2, wrapper.getHash());
 				stmt.setInt(3, wrapper.getChannelId());
 				stmt.setInt(4, wrapper.getId());
 				stmt.setBytes(5, wrapper.getData());
-				
-				
-				
+
+
+
 			    stmt.executeUpdate();
-			    
+
 			    ResultSet rs = stmt.getGeneratedKeys();
 			    rs.first();
 			    int id = rs.getInt(1);
-		
+
 			    stmt.close();
-				
+
 				return id;
 			} else {
 				stmt = conn.prepareStatement("UPDATE transactions SET hash=?, channel_id=?, payment_id=?, data=? WHERE id=?");
-				
+
 				stmt.setString(1, wrapper.getHash());
 				stmt.setInt(2, wrapper.getChannelId());
 				stmt.setInt(3, wrapper.getId());
 				stmt.setBytes(4, wrapper.getData());
 				stmt.setInt(5, wrapper.getId());
-				
-				
+
+
 			    stmt.executeUpdate();
 			    return wrapper.getId();
 			}
@@ -514,7 +514,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Adds the payment.
 	 *
@@ -574,7 +574,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Update payment.
 	 *
@@ -587,7 +587,7 @@ public class MySQLConnection {
         ArrayList<Payment> paymentList = new ArrayList<>();
         updatePayment(conn, paymentList);
 	}
-	
+
 	/**
 	 * Update payment.
 	 *
@@ -602,13 +602,13 @@ public class MySQLConnection {
 			stmt = conn.prepareStatement("UPDATE payments SET secret=? WHERE secret_hash=?");
 			stmt.setString(1, secret);
 			stmt.setString(2, secretHash);
-					
+
 		    stmt.executeUpdate();
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Check for secrets in channel.
 	 *
@@ -622,14 +622,14 @@ public class MySQLConnection {
 		try {
 			stmt = conn.prepareStatement("SELECT id FROM payments WHERE (channel_id_receiver=? AND include_in_receiver_channel=1 AND secret IS NULL)");
 			stmt.setInt(1, channelId);
-					
+
 		    ResultSet set = stmt.executeQuery();
 		    return set.first();
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Update payment refunds.
 	 *
@@ -662,8 +662,8 @@ public class MySQLConnection {
             if(stmt != null) stmt.close();
         }
     }
-	
-	
+
+
 	/**
 	 * Update payment.
 	 *
@@ -747,7 +747,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the payments included in channel.
 	 *
@@ -831,7 +831,7 @@ public class MySQLConnection {
             if(stmt != null) stmt.close();
         }
     }
-	
+
 	/**
 	 * Gets the payments included in channel with no secret.
 	 *
@@ -844,7 +844,7 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		try {
 			ArrayList<Payment> list = new ArrayList<Payment>();
-	
+
 			stmt = conn.prepareStatement("SELECT * FROM payments WHERE " +
                     "( ( (channel_id_sender=? AND include_in_sender_channel=1 AND phase_sender!=6) OR " +
                     "(channel_id_receiver=? AND include_in_receiver_channel=1 AND phase_receiver!=5 AND phase_receiver!=6) ) " +
@@ -852,11 +852,11 @@ public class MySQLConnection {
 			stmt.setInt(1, channelId);
             stmt.setInt(2, channelId);
 			ResultSet results = stmt.executeQuery();
-			
+
 			if(results.first()) {
-				
+
 				while(!results.isAfterLast() ) {
-					
+
 					Payment payment = new Payment(results);
 
 					if(payment.getChannelIdReceiver() == channelId) {
@@ -864,23 +864,23 @@ public class MySQLConnection {
 					} else {
 						payment.paymentToServer = true;
 					}
-					
+
 					list.add(payment);
-						
-					
+
+
 					results.next();
 				}
-				
+
 			}
 			results.close();
 
 			return list;
-	
+
 		} finally {
 			if(stmt != null) stmt.close();
-		}		
+		}
 	}
-	
+
 	/**
 	 * Gets the payments for updating channel ordered.
 	 *
@@ -899,16 +899,20 @@ public class MySQLConnection {
         System.out.println(amount + " - " + paymentList.size());
         ArrayList<Payment> addPayments = MySQLConnection.getPaymentsIncludedInChannelWithPaymentsNotAddedYet(conn, channelId, (amount - paymentList.size()));
 		paymentList.addAll(addPayments);
-		
+
 		paymentList.sort(new Comparator<Payment>() {
 			public int compare(Payment arg0, Payment arg1) {
 				return arg0.getId()-arg1.getId();
 			}
 		});
+
+
+
+
 		return paymentList;
 
 	}
-	
+
 	/**
 	 * Gets the payments included in channel with payments not added yet.
 	 *
@@ -929,36 +933,36 @@ public class MySQLConnection {
 			stmt.setInt(1, channelId);
             stmt.setInt(2, amount);
 			ResultSet results = stmt.executeQuery();
-			
+
 			if(results.first()) {
-				
+
 				while(!results.isAfterLast() ) {
-					
+
 					Payment payment = new Payment(results);
-					
+
 					if(payment.getChannelIdReceiver() == channelId) {
 						payment.paymentToServer = false;
 					} else {
 						payment.paymentToServer = true;
 					}
-					
+
 					list.add(payment);
-						
-					
+
+
 					results.next();
 				}
-				
+
 			}
 			results.close();
-			
+
 			return list;
-	
+
 		} finally {
 			if(stmt != null) stmt.close();
-		}		
+		}
 	}
 
-	
+
 	/**
 	 * Gets the payments included in channel with most recent.
 	 *
@@ -972,7 +976,7 @@ public class MySQLConnection {
 		list.add(getPaymentMostRecentSent(conn, channelId));
 		return list;
 	}
-	
+
 	/**
 	 * Gets the payment.
 	 *
@@ -992,23 +996,23 @@ public class MySQLConnection {
 			ResultSet results = stmt.executeQuery();
 			Payment payment = null;
 			if(results.first()) {
-								
+
 				payment = new Payment(results);
-				
+
 				if(payment.getChannelIdReceiver() == channelId) {
 					payment.paymentToServer = false;
 				} else {
 					payment.paymentToServer = true;
-				}					
+				}
 			}
-			
+
 			results.close();
 			return payment;
 		} finally {
 			if(stmt != null) stmt.close();
-		}		
+		}
 	}
-	
+
 	/**
 	 * Gets the payment most recent sent.
 	 *
@@ -1020,29 +1024,29 @@ public class MySQLConnection {
 	public static Payment getPaymentMostRecentSent(Connection conn, int channelId) throws SQLException {
 		PreparedStatement stmt = null;
 		try {
-	
+
 			stmt = conn.prepareStatement("SELECT * FROM payments WHERE channel_id_sender=? AND phase_sender=0 ORDER BY id DESC LIMIT 1");
 			stmt.setInt(1, channelId);
-			
+
 			ResultSet results = stmt.executeQuery();
 			Payment payment = null;
-			
+
 			if(results.first()) {
-								
+
 				payment = new Payment(results);
 				payment.paymentToServer = true;
 			}
-				
-					
+
+
 				results.close();
 				return payment;
 		} finally {
 			if(stmt != null) stmt.close();
-		}		
+		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Clean up database.
 	 *
@@ -1056,39 +1060,39 @@ public class MySQLConnection {
 			stmt = conn.createStatement();
 			String query = "SELECT * FROM channels WHERE (is_ready=0 AND establish_phase<4 AND timestamp_open<"+(Tools.currentTime()-Constants.MAX_CHANNEL_CREATION_TIME)+") OR (timestamp_close< " + (Tools.currentTime()-Constants.MAX_CHANNEL_KEEP_TIME_AFTER_CLOSED) + ")";
 			ResultSet results = stmt.executeQuery(query);
-			
+
 			ArrayList<Channel> list = new ArrayList<Channel>();
-			
+
 			if(results.first()) {
 				while(!results.isAfterLast()) {
 					list.add(new Channel(results));
 					results.next();
 				}
 			}
-			
+
 			results.close();
-			
+
 			for(Channel channel : list ) {
-					
+
 					query = "DELETE FROM transactions WHERE channel_id='"+channel.getId()+"'";
 					stmt.execute(query);
-					
+
 					query = "DELETE FROM messages WHERE pubkey='"+channel.getId()+"'";
 					stmt.execute(query);
-					
+
 					query = "DELETE FROM channels WHERE pub_key_client='"+channel.getId()+"'";
 					stmt.execute(query);
-	
+
 			}
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
 
-	
-	
-	
+
+
+
+
 	/**
 	 *  Create a new channel based on the request MessageOneRequest
 	 *  Will also create a new master key for us to use in this channel.
@@ -1102,17 +1106,17 @@ public class MySQLConnection {
 	 * @throws SQLException the SQL exception
 	 */
 	public static Channel createNewChannel(Connection conn, EstablishChannelRequestOne message, int timeStampOpen, String changeAddressServer, String changeAddressClient) throws SQLException {
-		
+
 		PreparedStatement stmt = null;
 		try {
-			
+
 			stmt = conn.prepareStatement("INSERT INTO channels (pub_key_client, pub_key_server, change_address_server, change_address_client , master_priv_key_server, timestamp_open, timestamp_close, establish_phase, is_ready, key_chain_depth, key_chain_child) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			
+
 			DeterministicKey key = KeyDerivation.getMasterKey(MySQLConnection.getKeyCount(conn));
-			
+
 			String masterKey = key.serializePrivB58(Constants.getNetwork());
 	//		String masterKey = key.serializePrivB58();
-			
+
 			stmt.setString(1, message.pubKey);
 			stmt.setString(2, Tools.byteToString(key.getPubKey()));
 			stmt.setString(3, changeAddressServer);
@@ -1124,15 +1128,15 @@ public class MySQLConnection {
 			stmt.setInt(9, 0);
 			stmt.setInt(10, ( message.timeInDays * 24 * 60 * 60 / Constants.TIMEFRAME_PER_KEY_DEPTH ) );
 			stmt.setInt(11, 0);
-			
+
 	//		System.out.println(stmt.toString());
 	//	    System.out.println(stmt.executeUpdate());
 			stmt.executeUpdate();
-			
+
 			conn.commit();
-			
+
 			Channel channel = MySQLConnection.getChannel(conn, message.pubKey);
-		    
+
 //		    Channel channel = new Channel();
 //		    channel.setMasterPrivateKeyServer(masterKey);
 //		    channel.setPubKeyClient(message.pubKey);
@@ -1141,14 +1145,14 @@ public class MySQLConnection {
 //		    channel.setKeyChainChild(0);
 //		    channel.setKeyChainDepth(( (int) (message.timeInDays * 24 * 60 * 60 / Constants.TIMEFRAME_PER_KEY_DEPTH ) ));
 //		    conn.commit();
-    
-	
+
+
 		    return channel;
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Check key.
 	 *
@@ -1168,38 +1172,38 @@ public class MySQLConnection {
 			} else {
 				sql = "SELECT * FROM storedkeys WHERE (channel_id=? AND pub_key=? AND used=0 AND exposed=0 AND priv_key IS NULL) FOR UPDATE";
 			}
-			
+
 			conn.commit();
 			stmt = conn.prepareStatement(sql);
-	
+
 			stmt.setInt(1, channel.getId());
 			stmt.setString(2, pubkey);
-					
+
 			ResultSet set = stmt.executeQuery();
-			
+
 			if(!set.first()) {
 				System.out.println("No key found...: "+stmt.toString());
 				set.close();
 				return false;
 			}
-			
+
 			int id = set.getInt("id");
-			
+
 			set.close();
 			stmt.close();
-				
-			
+
+
 			stmt = conn.prepareStatement("UPDATE storedkeys SET used=1 WHERE id=?");
 			stmt.setInt(1, id);
 			stmt.execute();
-			
+
 			conn.commit();
 			return true;
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the keys pub only.
 	 *
@@ -1218,21 +1222,21 @@ public class MySQLConnection {
 			} else {
 				sql = "SELECT id, pub_key FROM storedkeys WHERE (channel_id=? AND used=0 AND exposed=0 AND priv_key IS NULL) ORDER BY key_chain_depth ASC, key_chain_child DESC FOR UPDATE";
 			}
-	
+
 			stmt = conn.prepareStatement(sql);
-					
+
 			stmt.setInt(1, channel.getId());
 			ResultSet set = stmt.executeQuery();
-			
+
 			KeyWrapper keyWrapper = new KeyWrapper();
-						
+
 			if(!set.first()) {
 				System.out.println("No Key found for: "+stmt.toString());
 				conn.commit();
 				set.close();
 				return null;
 			}
-			
+
 			while(!set.isAfterLast()) {
 				keyWrapper.addKey(set.getInt("id"), set.getString("pub_key"));
 				set.next();
@@ -1243,7 +1247,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Sets the keys used.
 	 *
@@ -1255,7 +1259,7 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		try {
 			stmt = conn.prepareStatement("UPDATE storedkeys SET used=1 WHERE id=?");
-			
+
 			for(IKey k : keys.getKeyList()) {
 				if(k.used) {
 					stmt.setInt(1, k.id);
@@ -1268,8 +1272,8 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Gets the key.
 	 *
@@ -1288,22 +1292,22 @@ public class MySQLConnection {
 			} else {
 				sql = "SELECT id, pub_key FROM storedkeys WHERE (channel_id=? AND used=0 AND exposed=0 AND priv_key IS NULL) ORDER BY key_chain_depth ASC, key_chain_child DESC LIMIT 1 FOR UPDATE";
 			}
-			
-			
-			
+
+
+
 			stmt = conn.prepareStatement(sql);
-					
+
 			stmt.setInt(1, channel.getId());
 			ResultSet set = stmt.executeQuery();
-			
+
 			if(!set.first()) {
 				System.out.println("No Key found for: "+stmt.toString());
 				conn.commit();
 				set.close();
 				return null;
 			}
-				
-			
+
+
 			String pubKey = set.getString("pub_key");
 			int id = set.getInt("id");
 			stmt.close();
@@ -1317,8 +1321,8 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Gets the key.
 	 *
@@ -1332,14 +1336,14 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		try {
 			String sql = "SELECT priv_key FROM storedkeys WHERE (channel_id=? AND pub_key=? AND used=1 AND exposed=0 AND priv_key IS NOT NULL)";
-	
-		
+
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, channel.getId());
 			stmt.setString(2, pubKey);
 
 			ResultSet set = stmt.executeQuery();
-			
+
 			if(!set.first()) {
 				System.out.println("getKey return null..: "+stmt.toString());
 				set.close();
@@ -1352,7 +1356,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the key.
 	 *
@@ -1365,13 +1369,13 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		try {
 			String sql = "SELECT priv_key FROM storedkeys WHERE (pub_key=?)";
-	
-		
+
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, pubKey);
 
 			ResultSet set = stmt.executeQuery();
-			
+
 			if(!set.first()) {
 				System.out.println("getKey return null..: "+stmt.toString());
 				set.close();
@@ -1384,7 +1388,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the key currently used.
 	 *
@@ -1397,13 +1401,13 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		try {
 			String sql = "SELECT priv_key FROM storedkeys WHERE (channel_id=? AND used=1 AND exposed=0 AND owner=1) FOR UPDATE";
-	
-		
+
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, channel.getId());
 
 			ResultSet set = stmt.executeQuery();
-			
+
 			if(!set.first()) {
 				System.out.println("getKey return null..: "+stmt.toString());
 				set.close();
@@ -1416,7 +1420,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the keys of us to be exposed.
 	 *
@@ -1437,29 +1441,29 @@ public class MySQLConnection {
 			 * Actually we can send also unused keys, as we produce new keys with every connection anyways..
 			 */
 //			sql = "SELECT * FROM storedkeys WHERE (channel_id=? AND used=1 AND exposed=0 AND priv_key IS NOT NULL)";
-	
-	
-		
+
+
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, channel.getId());
 
 			set = stmt.executeQuery();
-	
-			
+
+
 			if(!set.first())
 				return null;
-			
+
 			ArrayList<Key> keysAll = new ArrayList<Key>();
-			
+
 			ArrayList<Key> keysToBeExposed = new ArrayList<Key>();
 			ArrayList<Key> keysToKeep = new ArrayList<Key>();
-	
-			
+
+
 			ArrayList<String> currentKeys = ScriptTools.getPubKeysOfChannel(channel, SideConstants.RUNS_ON_SERVER, true);
-	
-	
+
+
 			while(!set.isAfterLast()) {
-				
+
 				String pub = set.getString("pub_key");
 				boolean expose = true;
 				for(String s : currentKeys) {
@@ -1468,49 +1472,49 @@ public class MySQLConnection {
 	//					break;
 					}
 				}
-				
+
 				Key key = new Key();
 				key.child = set.getInt("key_chain_child");
 				key.depth = set.getInt("key_chain_depth");
 				key.publicKey = set.getString("pub_key");
 				key.privateKey = set.getString("priv_key");
-				
+
 				keysAll.add(key);
-				
+
 				if(expose) {
 					keysToBeExposed.add(key);
 				} else {
 					keysToKeep.add(key);
 				}
-				
-				
+
+
 				set.next();
 			}
-					
+
 			int highestDepthToKeep = 0;
 			int lowestDepthToExpose = 99999;
-			
+
 			stmt.close();
-			
+
 			stmt = conn.prepareStatement("UPDATE storedkeys SET exposed=1 WHERE (channel_id=? AND pub_key=?)");
-	
-			
+
+
 			for(Key k : keysToBeExposed) {
 				stmt.setInt(1, channel.getId());
 				stmt.setString(2, k.publicKey);
 				stmt.addBatch();
-				
+
 				if(lowestDepthToExpose > k.depth)
 					lowestDepthToExpose = k.depth;
 			}
 			if(exposeKeys)
 				stmt.executeBatch();
-			
+
 			for(Key k : keysToKeep) {
 				if(highestDepthToKeep < k.depth)
 					highestDepthToKeep = k.depth;
 			}
-			
+
 			if(highestDepthToKeep<lowestDepthToExpose) {
 				ArrayList<Key> keysToBeExposedNew = new ArrayList<Key>();
 				String masterKey;
@@ -1519,25 +1523,25 @@ public class MySQLConnection {
 				} else {
 					masterKey = channel.getMasterPrivateKeyClient();
 				}
-				
+
 				DeterministicKey masterKeyToExpose = KeyDerivation.calculateKeyChain(masterKey, highestDepthToKeep+1);
-				
+
 				Key key = new Key();
 				key.child = 0;
 				key.depth = highestDepthToKeep+1;
 	//			key.privateKey = masterKeyToExpose.serializePrivB58();
 				key.privateKey = masterKeyToExpose.serializePrivB58(Constants.getNetwork());
-				
+
 				keysToBeExposedNew.add(key);
-				
+
 				for(Key k : keysToBeExposed) {
 					if(k.depth > highestDepthToKeep) {
 						keysToBeExposedNew.add(k);
 					}
 				}
 				return keysToBeExposedNew;
-			}		
-			
+			}
+
 
 			return keysToBeExposed;
 		} finally {
@@ -1545,7 +1549,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Check keys from other side.
 	 *
@@ -1578,21 +1582,21 @@ public class MySQLConnection {
 				channel.newMasterKey(masterKey);
 				newKeys.remove(0);
 			}
-			
+
 
 			/**
 			 * Remove unneeded keys
 			 */
 			if(channel.getMasterPrivateKeyClient() != null && oldMasterDepth != channel.getMasterChainDepth()) {
 
-				ArrayList<Key> exposedKeys = MySQLConnection.getKeysExposed(conn, channel, false, channel.getMasterChainDepth());		
+				ArrayList<Key> exposedKeys = MySQLConnection.getKeysExposed(conn, channel, false, channel.getMasterChainDepth());
 
 				if(exposedKeys != null) {
-					
+
 					ArrayList<Key> keysToDelete = new ArrayList<Key>();
-					
+
 					DeterministicHierarchy hierachy;
-					
+
 					if(SideConstants.RUNS_ON_SERVER) {
 						hierachy = channel.getHierachyClient();
 					} else {
@@ -1602,22 +1606,22 @@ public class MySQLConnection {
 					for(Key k : exposedKeys) {
 						if(k.privateKey != null) {
 							if(k.depth > channel.getMasterChainDepth()) {
-								
+
 								List<ChildNumber> list = KeyDerivation.getChildList(k.depth-channel.getMasterChainDepth());
 								ChildNumber number = new ChildNumber(k.child, true);
 								list.add(number);
-								
+
 								DeterministicKey keyDerived = hierachy.get(list, true, true);
-								
+
 								if(k.privateKey.equals(Tools.byteToString(keyDerived.getPrivKeyBytes()))) {
 									keysToDelete.add(k);
 								} else {
 									/**
 									 * A key that was provided does not matched the path..
-									 * I don't know if this could happen accidently, but we should 
+									 * I don't know if this could happen accidently, but we should
 									 * do something about this, as we really want clients providing us with
 									 * proper data.
-									 * 
+									 *
 									 * In extreme cases, terminate the channel here..
 									 */
 								}
@@ -1629,22 +1633,22 @@ public class MySQLConnection {
                     MySQLConnection.deleteKey(conn, channel, keysToDelete);
 
                 }
-			
+
 			}
 
 			conn.commit();
 
-			
+
 			MySQLConnection.updateKey(conn, channel, newKeys, true, true);
             stmt = conn.prepareStatement("UPDATE storedkeys SET current_channel=0 WHERE current_channel=1 AND channel_id=?");
 			stmt.setInt(1, channel.getId());
 			stmt.execute();
 			stmt.close();
-			
+
 			conn.commit();
 //			performance.measure("checkKeysFromOtherSide 41");
 
-			
+
 			ArrayList<String> currentKeys = ScriptTools.getPubKeysOfChannel(channel, !SideConstants.RUNS_ON_SERVER, true);
 			stmt = conn.prepareStatement("UPDATE storedkeys SET current_channel=1 WHERE channel_id=? AND pub_key=?");
 			for(String s : currentKeys) {
@@ -1655,10 +1659,10 @@ public class MySQLConnection {
 			stmt.executeBatch();
 			conn.commit();
 			stmt.close();
-			
+
 //			performance.measure("checkKeysFromOtherSide 42");
 
-			
+
 			stmt = conn.prepareStatement("SELECT id FROM storedkeys WHERE channel_id=? AND owner=0 AND used=1 AND exposed=0 AND current_channel=0");
 			stmt.setInt(1, channel.getId());
 
@@ -1666,17 +1670,17 @@ public class MySQLConnection {
 			if(set.first()) {
 				throw new Exception("A key was not provided..");
 			}
-			
+
 //			performance.measure("checkKeysFromOtherSide 5");
 
-			
 
-			
-			
+
+
+
 //			/**
 //			 * Check if all keys that are marked as used in our database
 //			 * 		are exposed, except those used in the very current channel.
-//			 * 
+//			 *
 //			 * If the current channel tx is 0, this is the first payment.
 //			 */
 //			boolean notFound = false;
@@ -1687,17 +1691,17 @@ public class MySQLConnection {
 //				performance.measure("checkKeysFromOtherSide 42");
 //
 //				System.out.println(keysToBeExposed.size()+" should be exposed..");
-//				
+//
 //				ArrayList<String> a = new ArrayList<String>();
 //				ArrayList<String> b = new ArrayList<String>();
-//				
+//
 //				for(Key k : keysToBeExposed) {
 //					a.add(k.publicKey);
 //				}
 //				for(Key k : newKeys) {
 //					b.add(k.publicKey);
 //				}
-//				
+//
 //				performance.measure("checkKeysFromOtherSide 43");
 //
 //				if(!b.containsAll(a)) {
@@ -1706,7 +1710,7 @@ public class MySQLConnection {
 //				}
 //				performance.measure("checkKeysFromOtherSide 44");
 //
-//				
+//
 ////				for(Key key : keysToBeExposed) {
 ////					boolean found = false;
 ////					for(Key keyb : newKeys) {
@@ -1723,19 +1727,19 @@ public class MySQLConnection {
 ////				}
 ////				performance.measure("checkKeysFromOtherSide 45");
 //
-//			}		
+//			}
 //			performance.measure("checkKeysFromOtherSide 5");
 //
-//			
+//
 //			System.out.println("Added "+newKeys.size()+" exposed keys.");
-//			
-//			
+//
+//
 //			if(notFound)
 //				throw new Exception("A key, that should have be exposed, was not supplied..");
-			
 
-			
-			
+
+
+
 		} finally {
 //			performance.measure("checkKeysFromOtherSide 6");
 //			MySQLConnection.updateKey(conn, channel, newKeys, true, true);
@@ -1745,7 +1749,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the keys of other side to be exposed.
 	 *
@@ -1762,7 +1766,7 @@ public class MySQLConnection {
 		try {
 			String sql;
 			sql = "SELECT * FROM storedkeys WHERE (channel_id=? AND used=1 AND priv_key IS NULL) FOR UPDATE";
-		
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, channel.getId());
 
@@ -1772,10 +1776,10 @@ public class MySQLConnection {
 				return null;
 			ArrayList<Key> keysToBeExposed = new ArrayList<Key>();
 			ArrayList<String> currentKeys = ScriptTools.getPubKeysOfChannel(channel, !SideConstants.RUNS_ON_SERVER, true);
-			
+
 
 			while(!set.isAfterLast()) {
-				
+
 				String pub = set.getString("pub_key");
 				boolean expose = true;
 				for(String s : currentKeys) {
@@ -1784,28 +1788,28 @@ public class MySQLConnection {
 						break;
 					}
 				}
-				
+
 				Key key = new Key();
 				key.child = set.getInt("key_chain_child");
 				key.depth = set.getInt("key_chain_depth");
 				key.publicKey = set.getString("pub_key");
 				key.privateKey = set.getString("priv_key");
-				
+
 				if(expose) {
 					keysToBeExposed.add(key);
 				}
-	
+
 				set.next();
 			}
 
-	
+
 			return keysToBeExposed;
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the keys.
 	 *
@@ -1821,16 +1825,16 @@ public class MySQLConnection {
 		try {
 			String sql;
 			sql = "SELECT * FROM storedkeys WHERE (channel_id=? AND owner=?) FOR UPDATE";
-			
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, channel.getId());
 			stmt.setInt(2, Tools.boolToInt(ourKeys));
 			set = stmt.executeQuery();
 			if(!set.first())
 				return null;
-			
+
 			ArrayList<Key> keys = new ArrayList<Key>();
-			
+
 			while(!set.isAfterLast()) {
 				Key key = new Key();
 				key.child = set.getInt("key_chain_child");
@@ -1846,7 +1850,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the keys exposed.
 	 *
@@ -1861,43 +1865,43 @@ public class MySQLConnection {
 		ResultSet set = null;
 		try {
 			String sql;
-			
-	
+
+
 			sql = "SELECT * FROM storedkeys WHERE (channel_id=? AND exposed=1 AND owner=?) FOR UPDATE";
-			
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, channel.getId());
 			stmt.setInt(2, Tools.boolToInt(ourKeys));
-			
+
 			set = stmt.executeQuery();
-			
+
 			if(!set.first())
 				return null;
-			
+
 			ArrayList<Key> keys = new ArrayList<Key>();
-			
+
 			while(!set.isAfterLast()) {
-	
+
 				Key key = new Key();
 				key.child = set.getInt("key_chain_child");
 				key.depth = set.getInt("key_chain_depth");
 				key.publicKey = set.getString("pub_key");
 				key.privateKey = set.getString("priv_key");
-				
-				
+
+
 				keys.add(key);
-				
-	
+
+
 				set.next();
 			}
-	
+
 			return keys;
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the keys exposed.
 	 *
@@ -1914,44 +1918,44 @@ public class MySQLConnection {
 		ResultSet set = null;
 		try {
 			String sql;
-			
-	
+
+
 			sql = "SELECT * FROM storedkeys WHERE (channel_id=? AND exposed=1 AND owner=? AND key_chain_depth>?) FOR UPDATE";
-			
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, channel.getId());
 			stmt.setInt(2, Tools.boolToInt(ourKeys));
 			stmt.setInt(3, minDepth-1);
-			
+
 			set = stmt.executeQuery();
-			
+
 			if(!set.first())
 				return null;
-			
+
 			ArrayList<Key> keys = new ArrayList<Key>();
-			
+
 			while(!set.isAfterLast()) {
-	
+
 				Key key = new Key();
 				key.child = set.getInt("key_chain_child");
 				key.depth = set.getInt("key_chain_depth");
 				key.publicKey = set.getString("pub_key");
 				key.privateKey = set.getString("priv_key");
-				
-				
+
+
 				keys.add(key);
-				
-	
+
+
 				set.next();
 			}
-	
+
 			return keys;
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Delete key.
 	 *
@@ -1964,17 +1968,17 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		try {
 			String sql = "DELETE FROM storedkeys WHERE (channel_id=? AND pub_key=?)";
-		
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, channel.getId());
 			stmt.setString(2, key.publicKey);
-			
+
 			stmt.execute();
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Delete key.
 	 *
@@ -1987,15 +1991,15 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		try {
 			String sql = "DELETE FROM storedkeys WHERE (channel_id=? AND pub_key=?)";
-			
+
 			stmt = conn.prepareStatement(sql);
-			
+
 			for(Key key : keyList) {
-		
+
 				stmt = conn.prepareStatement(sql);
 				stmt.setInt(1, channel.getId());
 				stmt.setString(2, key.publicKey);
-				
+
 				stmt.addBatch();
 			}
 			stmt.executeBatch();
@@ -2004,7 +2008,7 @@ public class MySQLConnection {
 			conn.commit();
 		}
 	}
-	
+
 	/**
 	 * Delete unused and exposed keys from us.
 	 *
@@ -2016,7 +2020,7 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		try {
 			String sql = "DELETE FROM storedkeys WHERE (channel_id=? AND (exposed=1 OR used=0) AND owner=1)";
-		
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, channel.getId());
 
@@ -2026,7 +2030,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Delete unused key from other side.
 	 *
@@ -2038,7 +2042,7 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		try {
 			String sql = "DELETE FROM storedkeys WHERE (channel_id=? AND exposed=0 AND used=0 AND owner=0)";
-		
+
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, channel.getId());
 
@@ -2048,7 +2052,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the pub keys of channel.
 	 *
@@ -2062,12 +2066,12 @@ public class MySQLConnection {
 	 */
 	public static ArrayList<Key> getPubKeysOfChannel(Connection conn, Channel channel, boolean serverSide, boolean temporary) throws ScriptException, SQLException {
 		ArrayList<Key> currentKeys = new ArrayList<Key>();
-		
+
 		ArrayList<String> pubKeys = ScriptTools.getPubKeysOfChannel(channel, serverSide, temporary);
-		
+
 		return currentKeys;
 	}
-	
+
 	/**
 	 * Check channel for receiving.
 	 *
@@ -2088,26 +2092,26 @@ public class MySQLConnection {
 			} catch(Exception e) {
 				address = receiver;
 			}
-			
+
 			String sql = "";
-			
+
 			if(receiver.length() == 6) {
 				address = receiver+"%";
 				sql = "SELECT id FROM channels WHERE pub_key_client LIKE ? AND is_ready=1 FOR UPDATE";
 			} else {
-			
+
 				if(isAddress) {
 					sql = "SELECT id FROM channels WHERE change_address_client=? AND is_ready=1 FOR UPDATE";
 				} else {
 					sql = "SELECT id FROM channels WHERE pub_key_client=? AND is_ready=1 FOR UPDATE";
 				}
 			}
-			
+
 			stmt = conn.prepareStatement(sql);
-						
+
 			stmt.setString(1, address);
 			set = stmt.executeQuery();
-			
+
 			if(set.first()) {
 				return set.getInt("id");
 			} else
@@ -2116,10 +2120,10 @@ public class MySQLConnection {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
-			
-		
+
+
 	}
-	
+
 	/**
 	 *  Create a new channel based on the request MessageOneRequest
 	 *  Will also create a new master key for us to use in this channel.
@@ -2132,29 +2136,29 @@ public class MySQLConnection {
 	public static Channel createNewChannel(Connection conn, String changeAddressClient) throws SQLException {
 		PreparedStatement stmt = null;
 		try {
-	
+
 			stmt = conn.prepareStatement("INSERT INTO channels (pub_key_client, change_address_client, master_priv_key_client, establish_phase, is_ready) values (?, ?, ?, ?, ?)");
 			int count = MySQLConnection.getKeyCount(conn);
 			if(!SideConstants.RUNS_ON_SERVER)
 				count = (int) (Math.random() * 10000000);
 			DeterministicKey key = KeyDerivation.getMasterKey(count);
-			
+
 			String masterKey = key.serializePrivB58(Constants.getNetwork());
 	//		String masterKey = key.serializePrivB58();
-			
+
 			stmt.setString(1, Tools.byteToString(key.getPubKey()));
 			stmt.setString(2, changeAddressClient);
 			stmt.setString(3, masterKey);
 			stmt.setInt(4, 1);
 			stmt.setInt(5, 0);
-			
-			
+
+
 		    stmt.execute();
-		    
+
 		    stmt.close();
-		    
+
 		    conn.commit();
-		    
+
 		    Channel channel = MySQLConnection.getChannel(conn, Tools.byteToString(key.getPubKey()));
 
 //		    channel.setMasterPrivateKeyClient(masterKey);
@@ -2162,13 +2166,13 @@ public class MySQLConnection {
 //		    channel.setChangeAddressClient(changeAddressClient);
 
 			System.out.println("New channel: "+Tools.byteToString58(key.getPubKey()));
-			
+
 			return channel;
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Delete all specific Outputs.
 	 *
@@ -2177,14 +2181,14 @@ public class MySQLConnection {
 	 */
 	public static void deleteAllOutputs(Connection conn) throws SQLException {
 		PreparedStatement stmt = null;
-		try {		
+		try {
 			stmt = conn.prepareStatement("DELETE FROM outputs");
 			stmt.execute();
 		} finally {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Delete up one specific Output.
 	 *
@@ -2194,8 +2198,8 @@ public class MySQLConnection {
 	 */
 	public static void deleteOutput(Connection conn, Output output) throws SQLException {
 		PreparedStatement stmt = null;
-		try {	
-	
+		try {
+
 			stmt = conn.prepareStatement("DELETE FROM outputs WHERE transaction_hash=?");
 			stmt.setString(1, output.getHash());
 			stmt.execute();
@@ -2203,7 +2207,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Delete output by channel.
 	 *
@@ -2213,8 +2217,8 @@ public class MySQLConnection {
 	 */
 	public static void deleteOutputByChannel(Connection conn, Channel channel) throws SQLException {
 		PreparedStatement stmt = null;
-		try {	
-	
+		try {
+
 			stmt = conn.prepareStatement("DELETE FROM outputs WHERE channel_id=?");
 			stmt.setInt(1, channel.getId());
 			stmt.execute();
@@ -2222,7 +2226,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Return a channel.
 	 *
@@ -2247,7 +2251,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the channel.
 	 *
@@ -2261,7 +2265,7 @@ public class MySQLConnection {
 		try {
 			stmt = conn.prepareStatement("SELECT * FROM channels WHERE id=? FOR UPDATE");
 			stmt.setInt(1, id);
-					
+
 			ResultSet result = stmt.executeQuery();
 			result.first();
 			Channel c = new Channel(result);
@@ -2272,7 +2276,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Test if channel exists.
 	 *
@@ -2284,9 +2288,9 @@ public class MySQLConnection {
 	public static boolean testIfChannelExists(Connection conn, String pubKey) throws SQLException {
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("SELECT pub_key_client FROM channels WHERE pub_key_client=?");		
+			stmt = conn.prepareStatement("SELECT pub_key_client FROM channels WHERE pub_key_client=?");
 			stmt.setString(1, pubKey);
-					
+
 			ResultSet result = stmt.executeQuery();
 			boolean a = result.first();
 			result.close();
@@ -2295,7 +2299,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the opening hashes.
 	 *
@@ -2309,27 +2313,27 @@ public class MySQLConnection {
 		ResultSet set = null;
 		try {
 			BiMap<Integer, String> list = HashBiMap.create();
-	
+
 			String query = "SELECT opening_tx_hash, id FROM channels WHERE is_ready=? AND opening_tx_hash IS NOT NULL";
 			stmt = conn.prepareStatement(query);
 			stmt.setInt(1, Tools.boolToInt(ready));
 			ResultSet results = stmt.executeQuery();
-			
-			
+
+
 			if(results.first()) {
 				while(!results.isAfterLast()) {
 					list.put(results.getInt(2), results.getString(1));
 					results.next();
 				}
 			}
-			
+
 			return list;
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the single instance of MySQLConnection.
 	 *
@@ -2352,13 +2356,13 @@ public class MySQLConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		Connection conn =  DriverManager.getConnection(SideConstants.DATABASE_CONNECTION);
-		
+
 		return conn;
 
 	}
-	
+
 	/**
 	 * Gets the single instance of MySQLConnection.
 	 *
@@ -2371,7 +2375,7 @@ public class MySQLConnection {
 		// new MySQLConnection();
 		// return conn;
 		try {
-			
+
 			Class.forName("org.h2.Driver").newInstance();
 			Connection conn = null;
 			if(version == 1) {
@@ -2392,8 +2396,8 @@ public class MySQLConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 		return null;
 
 	}
@@ -2409,13 +2413,13 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		ArrayList<Channel> channelList = new ArrayList<Channel>();
 		try {
-			stmt = conn.prepareStatement("SELECT * FROM channels WHERE is_ready=1");	
+			stmt = conn.prepareStatement("SELECT * FROM channels WHERE is_ready=1");
 
 			ResultSet result = stmt.executeQuery();
-			
+
 			if(!result.first())
 				return channelList;
-			
+
 			while(!result.isAfterLast()) {
 				Channel c = new Channel(result);
 				c.conn = conn;
@@ -2428,7 +2432,7 @@ public class MySQLConnection {
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the fresh channels.
 	 *
@@ -2440,13 +2444,13 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		ArrayList<Channel> channelList = new ArrayList<Channel>();
 		try {
-			stmt = conn.prepareStatement("SELECT * FROM channels WHERE establish_phase=4 AND is_ready=0");	
+			stmt = conn.prepareStatement("SELECT * FROM channels WHERE establish_phase=4 AND is_ready=0");
 
 			ResultSet result = stmt.executeQuery();
-			
+
 			if(!result.first())
 				return channelList;
-			
+
 			while(!result.isAfterLast()) {
 				Channel c = new Channel(result);
 				c.conn = conn;
@@ -2475,7 +2479,7 @@ public class MySQLConnection {
 			stmt = conn.prepareStatement("SELECT * FROM payments WHERE ( channel_id_receiver=? AND include_in_receiver_channel=0 AND phase_receiver=0 ) ORDER BY id DESC");
 			stmt.setInt(1, channelId);
 			ResultSet results = stmt.executeQuery();
-			
+
 			if(results.first()) {
 				while(!results.isAfterLast() ) {
 					Payment payment = new Payment(results);
@@ -2484,7 +2488,7 @@ public class MySQLConnection {
 					} else {
 						payment.paymentToServer = true;
 					}
-					
+
 					list.add(payment);
 					results.next();
 				}
@@ -2493,7 +2497,7 @@ public class MySQLConnection {
 			return list;
 		} finally {
 			if(stmt != null) stmt.close();
-		}		
+		}
 	}
 
 	/**
@@ -2521,7 +2525,7 @@ public class MySQLConnection {
 					} else {
 						payment.paymentToServer = true;
 					}
-					
+
 					list.add(payment);
 					results.next();
 				}
@@ -2530,9 +2534,9 @@ public class MySQLConnection {
 			return list;
 		} finally {
 			if(stmt != null) stmt.close();
-		}		
+		}
 	}
-	
+
 	/**
 	 * Gets the payments refunded.
 	 *
@@ -2558,7 +2562,7 @@ public class MySQLConnection {
 					} else {
 						payment.paymentToServer = true;
 					}
-					
+
 					list.add(payment);
 					results.next();
 				}
@@ -2567,13 +2571,13 @@ public class MySQLConnection {
 			return list;
 		} finally {
 			if(stmt != null) stmt.close();
-		}		
+		}
 	}
-	
-	
+
+
 	/**
 	 * Get a tamper-proof key count for generating the master private key for a channel.
-	 * Ensures that each channel will have a unique key. 
+	 * Ensures that each channel will have a unique key.
 	 *
 	 * @param conn the conn
 	 * @return Use this hardened key for the channel.
@@ -2582,28 +2586,28 @@ public class MySQLConnection {
 	public static int getKeyCount(Connection conn) throws SQLException {
 		PreparedStatement stmt = null;
 		try {
-	
+
 			Statement query;
 			query = conn.createStatement();
-						
-			
+
+
 			ResultSet result = query.executeQuery("SELECT key_count FROM constants FOR UPDATE;");
 			result.first();
 			int id = result.getInt(1);
 			id++;
-			
+
 			query.execute("UPDATE constants SET key_count="+id);
-			
+
 			query.close();
 			conn.commit();
-	
+
 			return id;
 		} finally {
 			if(stmt != null) stmt.close();
-		}		
-		
+		}
+
 	}
-	
+
 	/**
 	 * Creates the keys.
 	 *
@@ -2617,79 +2621,79 @@ public class MySQLConnection {
 		Statement stmt = null;
 		ResultSet set = null;
 		try {
-	
-	
+
+
 			ArrayList<Key> keyList = new ArrayList<Key>();
-			
+
 			Statement query = conn.createStatement();
 			set = query.executeQuery("SELECT timestamp_close, key_chain_depth, key_chain_child, master_priv_key_server, master_priv_key_client FROM channels WHERE id='"+channel.getId()+ "' FOR UPDATE");
 //			set = query.executeQuery("SELECT timestamp_close, key_chain_depth, key_chain_child, master_priv_key_server, master_priv_key_client FROM channels WHERE pub_key_client='"+channel.getId()+"'");
 			set.first();
-			
+
 			int depth = set.getInt("key_chain_depth");
 			int child = set.getInt("key_chain_child");
 			int close = set.getInt("timestamp_close");
-			
+
 			int diff = ( (int) Math.floor((close-Tools.currentTime()) / Constants.TIMEFRAME_PER_KEY_DEPTH ) + 1);
-			
+
 			if(diff<depth) {
 				depth = diff;
 				child = 1;
 			}
-			
-	
-			
+
+
+
 			String masterKey;
 			if(SideConstants.RUNS_ON_SERVER) {
 				masterKey = set.getString("master_priv_key_server");
 			} else {
 				masterKey = set.getString("master_priv_key_client");
 			}
-			
+
 			DeterministicKey root = KeyDerivation.calculateKeyChain(masterKey, depth);
 			DeterministicHierarchy hierachy = new DeterministicHierarchy(root);
-			
+
 			DeterministicKey key;
-	
-			
+
+
 			for(int i=0; i<amount; i++ ) {
 				ArrayList<ChildNumber> list = new ArrayList<ChildNumber>();
 				ChildNumber childNumber = new ChildNumber(child+i+1, true);
 				list.add(childNumber);
-				
+
 				key = hierachy.get(list, true, true);
-				
+
 				Key k = new Key();
 				k.child = child+i+1;
 				k.depth = depth;
 				k.privateKey = Tools.byteToString(key.getPrivKeyBytes());
 				k.publicKey = Tools.byteToString(key.getPubKey());
-				
-				
-				
-				
+
+
+
+
 				keyList.add(k);
 			}
-	
-			
+
+
 			query.execute("UPDATE channels SET key_chain_depth="+depth+", key_chain_child="+(child+amount)+" WHERE id='"+channel.getId()+ "'");
 			conn.commit();
-			
+
 			MySQLConnection.addKey(conn, keyList, channel.getId(), true);
 			conn.commit();
-			
+
 			channel.setKeyChainChild(child+amount);
 			channel.setKeyChainDepth(depth);
-			
-			
+
+
 			return keyList;
-	
+
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the current payments amount.
 	 *
@@ -2708,15 +2712,15 @@ public class MySQLConnection {
 
 			set = stmt.executeQuery();
 			set.first();
-	
+
 			return set.getInt(1);
-	
+
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the payments amount.
 	 *
@@ -2735,18 +2739,18 @@ public class MySQLConnection {
             stmt.setInt(2, phase);
             stmt.setInt(3, channel.getId());
 			stmt.setInt(4, phase);
-	
+
 			set = stmt.executeQuery();
 			set.first();
-	
+
 			return set.getInt(1);
-	
+
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the opening transactions.
 	 *
@@ -2760,12 +2764,12 @@ public class MySQLConnection {
 		try {
 			ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 			HashMap<Integer, Channel> list = new HashMap<Integer, Channel>();
-	
+
 			stmt = conn.createStatement();
 			String query = "SELECT * FROM channels WHERE establish_phase=4";
 			set = stmt.executeQuery(query);
-			
-			
+
+
 			if(set.first()) {
 				while(!set.isAfterLast()) {
 					Channel channel = new Channel(set);
@@ -2773,21 +2777,21 @@ public class MySQLConnection {
 					set.next();
 				}
 			}
-			
+
 			for(Channel channel : list.values()) {
 				channel.conn = conn;
 				transactionList.add(channel.getOpeningTx());
 			}
-			
+
 			return list;
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Get all available outputs for channel creation.
 	 * Lock up each output that will get used in a channel
@@ -2807,36 +2811,38 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		ResultSet set = null;
 		try {
-	
+
 			int amountForeignInputs = transactionOld.getInputs().size();
-				
+
 			ArrayList<Output> list = new ArrayList<Output>();
 
 			if(SideConstants.RUNS_ON_SERVER) {
 				stmt = conn.prepareStatement("SELECT * FROM outputs WHERE timestamp_locked<? OR timestamp_locked=0 ORDER BY value ASC");
-				stmt.setInt(1, (Tools.currentTime()+Constants.MAX_CHANNEL_CREATION_TIME) ); 
+				stmt.setInt(1, (Tools.currentTime()+Constants.MAX_CHANNEL_CREATION_TIME) );
 				set = stmt.executeQuery();
-				set.first();
-				
-				
-				while(!set.isAfterLast()) {
-					Output output = new Output(set);
-					output.setChannelId(channelId);
-		
-					list.add(output);
-					set.next();
+				if (set.first() == false) {
+					System.err.println("EMPTY RESULT SET");
+				}
+				else {
+					while(!set.isAfterLast()) {
+						Output output = new Output(set);
+						output.setChannelId(channelId);
+
+						list.add(output);
+						set.next();
+					}
 				}
 			} else {
 				list = ThunderContext.outputList;
 			}
-			
-			Transaction transaction = null; 
-	
-			
+
+			Transaction transaction = null;
+
+
 			/**
 			 * Lets see if we can pay the payment with only one of our outputs..
 			 */
-			
+
 			long value;
 			if(withFees) {
 				value = (myShare + Tools.getTransactionFees(transactionOld.getInputs().size()+1, transactionOld.getOutputs().size() + 1));
@@ -2862,20 +2868,20 @@ public class MySQLConnection {
 					} else {
 						transaction.addOutput(Coin.valueOf(o.getValue() - myShare), changeAddress);
 					}
-	
+
 					lockOutputs(conn, o);
 					if(sign) {
-						
+
 						transaction.addInput(new Sha256Hash(o.getHash()), o.getVout(), o.getTransactionOutput().getScriptPubKey());
-						
+
 						Sha256Hash hash = transaction.hashForSignature(amountForeignInputs, o.getTransactionOutput().getScriptBytes(), SigHash.ALL, false);
 						ECDSASignature signature = o.getECKey().sign(hash);
-						
+
 						TransactionSignature sig = new TransactionSignature(signature, SigHash.ALL, false);
-						
+
 						Script script = ScriptBuilder.createInputScript(sig, o.getECKey());
 						transaction.getInput(amountForeignInputs).setScriptSig(script);
-						
+
 	//					transaction.addSignedInput(o.getTransactionOutput(), o.getECKey());
 					} else {
 						transaction.addInput(new Sha256Hash(o.getHash()), o.getVout(), new Script( o.getTransactionOutput().getScriptBytes() ));
@@ -2899,13 +2905,13 @@ public class MySQLConnection {
 					 */
 				} else {
 					transaction  = transactionOld;
-					
+
 					if(withFees) {
 						transaction.addOutput(Coin.valueOf( totalValue - myShare - Tools.getTransactionFees(transactionOld.getInputs().size() + inputList.size(), transactionOld.getOutputs().size() + 1)), changeAddress);
 					} else {
 						transaction.addOutput(Coin.valueOf(totalValue - myShare), changeAddress);
 					}
-					
+
 					/**
 					 * Add all inputs first before starting to sign
 					 */
@@ -2914,39 +2920,39 @@ public class MySQLConnection {
 						transaction.addInput(new Sha256Hash(o.getHash()), o.getVout(), new Script( o.getTransactionOutput().getScriptBytes() ));
 
 					}
-					
+
 					/**
 					 * Sign all of our inputs..
-					 */	
+					 */
 					if(sign) {
 						int j=0;
 						for(int i=amountForeignInputs; i<transaction.getInputs().size(); ++i) {
 							Output o = inputList.get(j);
-							
+
 							Sha256Hash hash = transaction.hashForSignature(i, o.getTransactionOutput().getScriptBytes(), SigHash.ALL, false);
 							ECDSASignature signature = o.getECKey().sign(hash);
-							
+
 							TransactionSignature sig = new TransactionSignature(signature, SigHash.ALL, false);
-							
+
 							Script script = ScriptBuilder.createInputScript(sig, o.getECKey());
 							transaction.getInput(i).setScriptSig(script);
 							j++;
 						}
 					}
-	
+
 				}
 			}
 
-			
+
 			conn.commit();
 			return transaction;
-	
+
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
-		}		
+		}
 	}
-	
+
 	/**
 	 * Get one specific output.
 	 *
@@ -2960,7 +2966,7 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		ResultSet set = null;
 		try {
-	
+
 			stmt = conn.prepareStatement("SELECT * FROM outputs WHERE transaction_hash=? AND vout=?");
 			stmt.setString(1, transactionHash);
 			stmt.setLong(2, vout);
@@ -2968,13 +2974,13 @@ public class MySQLConnection {
 			set.first();
 			Output output = new Output(set);
 			return output;
-	
+
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the transaction.
 	 *
@@ -2992,18 +2998,18 @@ public class MySQLConnection {
 			stmt = conn.prepareStatement("SELECT * FROM transactions WHERE id=? FOR UPDATE");
 			stmt.setInt(1, id);
 			set = stmt.executeQuery();
-	
+
 			if(set.first()) {
 				Transaction transaction = new Transaction(Constants.getNetwork(), set.getBytes("data"));
-				return transaction;		
-			} 
+				return transaction;
+			}
 			return null;
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Gets the transaction.
 	 *
@@ -3020,18 +3026,18 @@ public class MySQLConnection {
 			stmt = conn.prepareStatement("SELECT data FROM transactions WHERE hash=? FOR UPDATE");
 			stmt.setString(1, hash);
 			set = stmt.executeQuery();
-	
+
 			if(set.first()) {
 				Transaction transaction = new Transaction(Constants.getNetwork(), set.getBytes("data"));
-				return transaction;		
-			} 
+				return transaction;
+			}
 			return null;
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Get all available outputs for channel creation.
 	 * Lock up each output that will get used in a channel
@@ -3044,35 +3050,35 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		ResultSet set = null;
 		try {
-	
+
 			stmt = conn.prepareStatement("SELECT * FROM outputs WHERE timestamp_locked<" + (Tools.currentTime() + Constants.MAX_CHANNEL_CREATION_TIME));
 			set = stmt.executeQuery();
 			set.first();
-			
+
 			ArrayList<Output> list = new ArrayList<Output>();
-			
+
 			while(!set.isAfterLast()) {
-				
+
 				Output output = new Output();
-				
+
 				output.setHash(set.getString("transaction_hash"));
 				output.setVout(set.getInt("vout"));
 				output.setValue(set.getLong("value"));
 				output.setPrivateKey(set.getString("private_key"));
 				output.setLock(set.getInt("timestamp_locked"));
 				output.setTransactionOutput(new TransactionOutput(Constants.getNetwork(), null, set.getBytes("transaction_output"), 0));
-				
+
 				list.add(output);
 				set.next();
 			}
 			return list;
-	
+
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
+
 	/**
 	 * Insert transaction.
 	 *
@@ -3086,7 +3092,7 @@ public class MySQLConnection {
 		try {
 
 			stmt = conn.createStatement();
-	
+
 			String sql = "INSERT INTO transactions VALUES(NULL, '"+t.getHashAsString()+"', 'test', 1, NULL)";
 			stmt.execute(sql);
 		} finally {
@@ -3095,7 +3101,7 @@ public class MySQLConnection {
 		}
 
 	}
-	
+
 	/**
 	 * Delete transaction.
 	 *
@@ -3108,16 +3114,16 @@ public class MySQLConnection {
 			Statement stmt = null;
 			try {
 				stmt = conn.createStatement();
-		
+
 				String sql = "DELETE FROM transactions WHERE id="+id;
 //				stmt.execute(sql);
-				
+
 			} finally {
 				if(stmt != null) stmt.close();
 			}
 		}
 	}
-	
+
 	/**
 	 * Lock up one specific Output.
 	 *
@@ -3151,28 +3157,28 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		ResultSet set = null;
 		try {
-	
+
 			stmt = conn.prepareStatement("INSERT INTO messages (id, type, message, timestamp, pubkey, signature) values (?, ?, ?, ?, ?, ?)");
-			
+
 			stmt.setString(1, null);
 			stmt.setInt(2, message.type);
 			stmt.setString(3, message.data);
 			stmt.setInt(4, message.timestamp);
 			stmt.setString(5, message.pubkey);
 			stmt.setString(6, message.signature);
-			
+
 		    stmt.executeUpdate();
-    
-    
+
+
 		} finally {
 			if(set != null) set.close();
 			if(stmt != null) stmt.close();
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 	/**
 	 * Update channel.
 	 *
@@ -3184,17 +3190,17 @@ public class MySQLConnection {
 		PreparedStatement stmt = null;
 		ResultSet set = null;
 		try {
-	
-			
+
+
 			channel.updateTransactionsToDatabase(conn);
 			try {
 				conn.commit();
 			} catch(SQLException e) {
-				
+
 			}
-			
+
 			stmt = conn.prepareStatement("UPDATE channels SET master_priv_key_client=?, master_priv_key_server=?, initial_amount_server=?, initial_amount_client=?, amount_server=?, amount_client=?, timestamp_open=?, timestamp_close=?, opening_tx=?, refund_tx_server=?, refund_tx_client=?, channel_tx_server=?, channel_tx_revoke_server=?, channel_tx_client=?, channel_tx_revoke_client=?, has_open_payments=?, establish_phase=?, is_ready=?, key_chain_depth=?, key_chain_child=?, channel_tx_server_temp=?, channel_tx_client_temp=?, channel_tx_revoke_client_temp=?, channel_tx_revoke_server_temp=?, payment_phase=?, master_chain_depth=?, opening_tx_hash=?, change_address_server=?, pub_key_server=?, pub_key_client=? WHERE id=?");
-			
+
 			stmt.setString(1, channel.getMasterPrivateKeyClient());
 			stmt.setString(2, channel.getMasterPrivateKeyServer());
 			stmt.setLong(3, channel.getInitialAmountServer());
@@ -3239,7 +3245,7 @@ public class MySQLConnection {
 			try {
 				conn.commit();
 			} catch(SQLException e) {
-				
+
 			}
 		} finally {
 			if(set != null) set.close();
@@ -3247,13 +3253,13 @@ public class MySQLConnection {
 		}
 	}
 
-	
+
 	/**
 	 * The conn.
 	 */
 	Connection conn;
 
-	
+
 	/**
 	 * Instantiates a new my sql connection.
 	 */
@@ -3262,5 +3268,5 @@ public class MySQLConnection {
 
 
 	}
-	
+
 }

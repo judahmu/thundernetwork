@@ -3,14 +3,14 @@ package wallettemplate.controls;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.NetworkParameters;
+
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import wallettemplate.utils.TextFieldValidator;
 
-/**
- * Given a text field, some network params and optionally some nodes, will make the text field an angry red colour
- * if the address is invalid for those params, and enable/disable the nodes.
- */
+/** Given a text field, some network params and optionally some nodes, will make
+ * the text field an angry red colour if the address is invalid for those
+ * params, and enable/disable the nodes. */
 public class BitcoinAddressValidator {
     private NetworkParameters params;
     private Node[] nodes;
@@ -31,7 +31,8 @@ public class BitcoinAddressValidator {
 
     private void toggleButtons(String current) {
         boolean valid = testAddr(current);
-        for (Node n : nodes) n.setDisable(!valid);
+        for (Node n : nodes)
+            n.setDisable(!valid);
     }
 
     private boolean testAddr(String text) {

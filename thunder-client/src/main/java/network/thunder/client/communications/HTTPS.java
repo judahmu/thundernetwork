@@ -11,7 +11,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,9 +26,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import network.thunder.client.etc.Constants;
-import network.thunder.client.etc.SideConstants;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -40,11 +37,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 
 import com.google.gson.Gson;
 
-
+import network.thunder.client.etc.Constants;
 
 public class HTTPS {
 
@@ -52,13 +48,10 @@ public class HTTPS {
 
 	HttpClient httpClient;
 	public HttpResponse httpResponse;
-	
-//	HttpURLConnection urlConnection;
+
 	HttpPost httpPost;
 	HttpGet httpGet;
-	List <NameValuePair> nvps;
-	
-	
+	List<NameValuePair> nvps;
 
 	boolean error = false;
 
@@ -66,15 +59,15 @@ public class HTTPS {
 
 	public boolean connect(String URL) {
 		try {
-			
-			RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10 * 1000).build();
+
+			RequestConfig.custom().setConnectTimeout(10 * 1000).build();
 			httpClient = HttpClients.createDefault();
-			
+
 			httpGet = new HttpGet(URL);
 			httpResponse = httpClient.execute(httpGet);
 
 			return true;
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -84,16 +77,10 @@ public class HTTPS {
 	public boolean connectPOST(String URL) {
 		try {
 
-			RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10 * 1000).build();
+			RequestConfig.custom().setConnectTimeout(10 * 1000).build();
 			httpClient = HttpClients.createDefault();
 			httpPost = new HttpPost(URL);
-//			httpPost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-//			httpPost.setHeader("Accept-Encoding", "gzip, deflate");
-//		    httpPost.setHeader("Content-Type", "application/json");
-//		    httpPost.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0");
-
-			nvps = new ArrayList <NameValuePair>();
-			
+			nvps = new ArrayList<NameValuePair>();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,71 +88,63 @@ public class HTTPS {
 		}
 	}
 
-
 	public void addPOSTParameter(String parameter, String value) {
-        nvps.add(new BasicNameValuePair(parameter, value));
+		nvps.add(new BasicNameValuePair(parameter, value));
 	}
 
 	public void submitPOST() throws ClientProtocolException, IOException {
-	        httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-	        httpResponse = httpClient.execute(httpPost);
+		httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
+		httpResponse = httpClient.execute(httpPost);
 	}
-	
+
 	public static String postToApi(Object data) throws ClientProtocolException, IOException {
-    	HTTPS connectionOne = new HTTPS();
-    	connectionOne.connectPOST("http://"+Constants.SERVER_URL+"/api/");
-//    	connectionOne.connectPOST("http://localhost/api/");
-    	String d = new Gson().toJson(data);
-//    	System.out.println("Request Size: "+d.length());
-    	connectionOne.addPOSTParameter("data", d );
-    	connectionOne.submitPOST();
-    	return connectionOne.getContent();
+		HTTPS connectionOne = new HTTPS();
+		connectionOne.connectPOST("http://" + Constants.SERVER_URL + "/api/");
+		String d = new Gson().toJson(data);
+		connectionOne.addPOSTParameter("data", d);
+		connectionOne.submitPOST();
+		return connectionOne.getContent();
 	}
 
 	public String getContent() throws UnsupportedOperationException, IOException {
 		if (httpResponse != null && !error) {
 
-				
-				HttpEntity entity = httpResponse.getEntity(); 
-				 
-				BufferedReader br = 
-						new BufferedReader(
-							new InputStreamReader(entity.getContent()));
-								
-				String input;
-				String ausgabe = "";
+			HttpEntity entity = httpResponse.getEntity();
 
-				while ((input = br.readLine()) != null) {
-					ausgabe += input + "\n";
-				}
-				br.close();
+			BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
 
-				return ausgabe;
+			String input;
+			String ausgabe = "";
 
+			while ((input = br.readLine()) != null) {
+				ausgabe += input + "\n";
+			}
+			br.close();
 
+			return ausgabe;
 		}
 		return null;
 
 	}
-	
-	private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException
-	{
-	    StringBuilder result = new StringBuilder();
-	    boolean first = true;
 
-	    for (NameValuePair pair : params)
-	    {
-	        if (first)
-	            first = false;
-	        else
-	            result.append("&");
+	@SuppressWarnings("unused")
+	private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException {
+		StringBuilder result = new StringBuilder();
+		boolean first = true;
 
-	        result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
-	        result.append("=");
-	        result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
-	    }
+		for (NameValuePair pair : params) {
+			if (first) {
+				first = false;
+			} else {
+				result.append("&");
+			}
 
-	    return result.toString();
+			result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
+			result.append("=");
+			result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
+		}
+
+		return result.toString();
 	}
 
 }

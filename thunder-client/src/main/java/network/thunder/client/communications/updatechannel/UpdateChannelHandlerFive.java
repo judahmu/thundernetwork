@@ -11,7 +11,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,21 +25,20 @@ import network.thunder.client.database.MySQLConnection;
 import network.thunder.client.database.objects.Channel;
 
 public class UpdateChannelHandlerFive {
-	public Connection conn;
-	public Channel channel;	
-	
 
-	
+	public Connection conn;
+	public Channel channel;
+
 	public UpdateChannelRequestFive request() throws Exception {
 		UpdateChannelRequestFive request = new UpdateChannelRequestFive();
-		
+
 		request.keyList = MySQLConnection.getKeysOfUsToBeExposed(conn, channel, false);
 
 		return request;
 	}
-	
+
 	public void evaluate(UpdateChannelResponseFive m) throws Exception {
-		if(channel.getChannelTxClientID() != 0) {
+		if (channel.getChannelTxClientID() != 0) {
 			MySQLConnection.checkKeysFromOtherSide(conn, channel, m.keyList);
 		}
 		MySQLConnection.getKeysOfUsToBeExposed(conn, channel, true);

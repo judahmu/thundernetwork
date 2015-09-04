@@ -11,7 +11,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,17 +23,20 @@ import java.security.NoSuchAlgorithmException;
 import network.thunder.client.etc.Tools;
 
 public class Secret {
-	public String secret;
-	public String secretHash;
-	
-	
-	public boolean verify() throws UnsupportedEncodingException, NoSuchAlgorithmException {
-		return secretHash.equals(Tools.hashSecret(Tools.stringToByte(secret)));
-	}
-	
-	public Secret() {}
-	public Secret(String secretHash, String secret) {
-		this.secret = secret;
-		this.secretHash = secretHash;
-	}
+
+    public String secret;
+    public String secretHash;
+
+    public boolean verify() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        return secretHash.equals(Tools.hashSecret(Tools.stringToByte(secret)));
+    }
+
+    public Secret() {
+    }
+
+    public Secret(String secretHash, String secret) {
+        this.secret = secret;
+        this.secretHash = secretHash;
+    }
+
 }

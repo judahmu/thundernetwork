@@ -11,7 +11,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,68 +19,60 @@ package network.thunder.client.database.objects;
 
 import java.util.ArrayList;
 
-import network.thunder.client.etc.Tools;
-
 import org.bitcoinj.core.ECKey;
 
-public class KeyWrapper {
-	
-	public class IKey {
-		public String pubKey;
-		public int id;
-		public boolean used;
-	}
-	
-	ArrayList<IKey> keyList = new ArrayList<IKey>();
-	
-	public String getKey() {
-		for(IKey k : keyList) {
-//			if(!k.used) {
-				k.used = true;
-				return k.pubKey;
-//			}
-		}
-		return null;
-	}
-	
-	public ECKey getUsedECKey(String pubKey) {
-		for(IKey k : keyList) {
-			if(k.used) {
-				if(k.pubKey.equals(pubKey)) {
-					ECKey key = ECKey.fromPrivate(Tools.stringToByte(pubKey));
-					return key;
-				}
-			}
-		
-		}
-		return null;
-	}
-	
-	public void addKey(int id, String pubKey) {
-		IKey k = new IKey();
-		k.id = id;
-		k.pubKey = pubKey;
-		keyList.add(k);
-	}
-	
-	public boolean checkKey(String pubKey) {
-		for(IKey k : keyList) {
-//			if(!k.used) {
-				if(k.pubKey.equals(pubKey)) {
-					k.used = true;
-					return true;
-				}
-//			}
-		
-		}
-		return false;
-	}
-	
-	public ArrayList<IKey> getKeyList() {
-		return keyList;
-	}
+import network.thunder.client.etc.Tools;
 
-	
-	
+public class KeyWrapper {
+
+    public class IKey {
+        public String pubKey;
+        public int id;
+        public boolean used;
+    }
+
+    ArrayList<IKey> keyList = new ArrayList<IKey>();
+
+    public String getKey() {
+        for (IKey k : keyList) {
+            k.used = true;
+            return k.pubKey;
+        }
+        return null;
+    }
+
+    public ECKey getUsedECKey(String pubKey) {
+        for (IKey k : keyList) {
+            if (k.used) {
+                if (k.pubKey.equals(pubKey)) {
+                    ECKey key = ECKey.fromPrivate(Tools.stringToByte(pubKey));
+                    return key;
+                }
+            }
+
+        }
+        return null;
+    }
+
+    public void addKey(int id, String pubKey) {
+        IKey k = new IKey();
+        k.id = id;
+        k.pubKey = pubKey;
+        keyList.add(k);
+    }
+
+    public boolean checkKey(String pubKey) {
+        for (IKey k : keyList) {
+            if (k.pubKey.equals(pubKey)) {
+                k.used = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<IKey> getKeyList() {
+        return keyList;
+    }
 
 }

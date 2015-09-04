@@ -11,7 +11,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,15 +25,14 @@ import network.thunder.client.database.objects.Channel;
 
 public class UpdateChannelHandlerOne {
 	public Connection conn;
-	public Channel channel;	
-	
+	public Channel channel;
+
 	public int totalAmountOfPayments = 0;
-	
+
 	public UpdateChannelRequestOne request() throws Exception {
-		
 		return new UpdateChannelRequestOne();
 	}
-	
+
 	public void evaluate(UpdateChannelResponseOne m) {
 		totalAmountOfPayments += m.amountCurrentPayments + m.amountNewPayments;
 	}
